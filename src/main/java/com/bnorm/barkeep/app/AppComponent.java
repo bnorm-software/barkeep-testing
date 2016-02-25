@@ -1,12 +1,10 @@
 package com.bnorm.barkeep.app;
 
-import javax.inject.Singleton;
-
 import com.bnorm.barkeep.net.NetComponent;
 
 import dagger.Component;
 
-@Singleton
+@AppScope
 @Component(dependencies = NetComponent.class)
 public interface AppComponent {
 
