@@ -18,7 +18,7 @@ import okhttp3.ResponseBody;
 import okio.Buffer;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.moshi.MoshiConverterFactory;
 
 @Module
 public class NetModule {
@@ -51,7 +51,7 @@ public class NetModule {
     @Provides
     Retrofit provideRetrofit(OkHttpClient okHttpClient) {
         Retrofit.Builder builder = new Retrofit.Builder();
-        builder.addConverterFactory(GsonConverterFactory.create());
+        builder.addConverterFactory(MoshiConverterFactory.create());
         builder.addCallAdapterFactory(RxJavaCallAdapterFactory.create());
         builder.baseUrl(httpUrl);
         builder.client(okHttpClient);
