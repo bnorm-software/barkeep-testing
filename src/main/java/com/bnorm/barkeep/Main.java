@@ -17,9 +17,10 @@ public class Main {
         HttpUrl.Builder urlBuilder = new HttpUrl.Builder();
         urlBuilder.scheme("https");
         urlBuilder.host("barkeep.beefyhost.com");
-        urlBuilder.addPathSegment("rest");
-        urlBuilder.addPathSegment("api");
-        urlBuilder.addPathSegment("v1");
+        urlBuilder.port(8443);
+//        urlBuilder.addPathSegment("rest");
+//        urlBuilder.addPathSegment("api");
+//        urlBuilder.addPathSegment("v1");
         // This last, empty segment adds a trailing '/' which is required for relative paths in the annotations
         urlBuilder.addPathSegment("");
 

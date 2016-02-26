@@ -7,10 +7,10 @@ import rx.Observable;
 
 public interface BarkeepService {
 
-    @POST("login")
+    @POST("Login")
     Observable<Message> login(@Body User user);
 
-    @POST("logout")
+    @POST("Logout")
     Observable<Void> logout();
 
     @GET("ingredients")
