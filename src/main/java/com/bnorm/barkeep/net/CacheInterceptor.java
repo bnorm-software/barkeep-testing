@@ -1,6 +1,7 @@
 package com.bnorm.barkeep.net;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
@@ -16,7 +17,10 @@ public class CacheInterceptor implements Interceptor {
         if (refresh) {
             request = request.newBuilder().cacheControl(CacheControl.FORCE_NETWORK).build();
         } else {
-            request = request.newBuilder().cacheControl(new CacheControl.Builder().onlyIfCached().build()).build();
+            request = request.newBuilder()
+                             .cacheControl(new CacheControl.Builder().maxStale(Integer.MAX_VALUE, TimeUnit.SECONDS)
+                                                                     .build())
+                             .build();
         }
         return chain.proceed(request);
     }
