@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.inject.Inject;
 
 import com.bnorm.barkeep.net.BarkeepService;
+import com.bnorm.barkeep.net.data.User;
 
 import okhttp3.Cache;
 
@@ -20,9 +21,7 @@ public class Application {
     }
 
     public void run() throws IOException {
-        BarkeepService.User authentication = new BarkeepService.User();
-        authentication.setUsername("bnorm");
-        authentication.setPassword("nohomohug");
+        User authentication = new User("bnorm", "nohomohug");
 
         service.login(authentication).subscribe(System.out::println);
         service.getIngredient().subscribe(System.out::println);
