@@ -1,11 +1,15 @@
 package com.bnorm.barkeep.net;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
 import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -36,14 +40,20 @@ public class NetModule {
     }
 
     @NetScope
+    @Provides(type = Provides.Type.SET_VALUES)
+    Set<Interceptor> provideInterceptors(CacheInterceptor cacheInterceptor) {
+        return new LinkedHashSet<>(Arrays.asList(cacheInterceptor,
+                                                 new SessionInterceptor(),
+                                                 new TokenInterceptor(),
+                                                 new WireTraceInterceptor()));
+    }
+
+    @NetScope
     @Provides
-    OkHttpClient provideOkHttpClient(Cache cache, CacheInterceptor cacheInterceptor) {
+    OkHttpClient provideOkHttpClient(Cache cache, Set<Interceptor> interceptors) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.cache(cache);
-        builder.addInterceptor(cacheInterceptor);
-        builder.addInterceptor(new SessionInterceptor());
-        builder.addInterceptor(new TokenInterceptor());
-        builder.addInterceptor(new WireTraceInterceptor());
+        interceptors.forEach(builder::addInterceptor);
         return builder.build();
     }
 
