@@ -5,10 +5,8 @@ import lombok.Data;
 @Data
 public class Book {
 
-    private String id;
+    private long id;
     private String type;
     private final String title;
     private final String description;
-    private String createStamp;
-    private String modifyStamp;
 }
