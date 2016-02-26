@@ -43,24 +43,25 @@ public class WireTraceInterceptor implements Interceptor {
         if (responseBody != null) {
             if (responseBody.contentType() != null && responseBody.contentType().charset() != null) {
                 String rawBody = responseBody.string();
-                System.out.println(String.format("Received response for [%s %s] in %sms with body [%s]",
+                System.out.println(String.format("Received [%d] response for [%s %s] in %sms with body [%s]",
+                                                 response.code(),
                                                  response.request().method(),
                                                  response.request().url(),
                                                  duration.toMillis(),
                                                  rawBody));
 
                 // Reading the body as a string closes the stream so create a new response body
-                response = response.newBuilder()
-                                   .body(ResponseBody.create(responseBody.contentType(), rawBody))
-                                   .build();
+                response = response.newBuilder().body(ResponseBody.create(responseBody.contentType(), rawBody)).build();
             } else {
-                System.out.println(String.format("Received response for [%s %s] in %sms with non-text body",
+                System.out.println(String.format("Received [%d] response for [%s %s] in %sms with non-text body",
+                                                 response.code(),
                                                  response.request().method(),
                                                  response.request().url(),
                                                  duration.toMillis()));
             }
         } else {
-            System.out.println(String.format("Received response for [%s %s] in %sms",
+            System.out.println(String.format("Received [%d] response for [%s %s] in %sms",
+                                             response.code(),
                                              response.request().method(),
                                              response.request().url(),
                                              duration.toMillis()));
