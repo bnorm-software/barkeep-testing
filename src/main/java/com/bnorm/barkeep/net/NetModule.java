@@ -19,18 +19,19 @@ import retrofit2.converter.moshi.MoshiConverterFactory;
 public class NetModule {
 
     private final HttpUrl httpUrl;
+    private final File cacheFile;
+    private final int cacheSize;
 
     public NetModule(HttpUrl httpUrl) {
         this.httpUrl = httpUrl;
+        this.cacheFile = new File("http");
+        this.cacheSize = 10 * 1024 * 1024; // 10 MiB
     }
 
     @NetScope
     @Provides
     Cache provideOkHttpCache() {
-        File file = new File("http");
-        int cacheSize = 10 * 1024 * 1024; // 10 MiB
-        Cache cache = new Cache(file, cacheSize);
-        return cache;
+        return new Cache(cacheFile, cacheSize);
     }
 
     @NetScope

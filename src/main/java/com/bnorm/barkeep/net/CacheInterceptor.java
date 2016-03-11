@@ -9,6 +9,9 @@ import okhttp3.Request;
 
 public class CacheInterceptor implements Interceptor {
 
+    public static final CacheControl DEFAULT = new CacheControl.Builder().maxStale(Integer.MAX_VALUE, TimeUnit.SECONDS)
+                                                                         .build();
+
     public boolean refresh = false;
 
     @Override
@@ -17,10 +20,7 @@ public class CacheInterceptor implements Interceptor {
         if (refresh) {
             request = request.newBuilder().cacheControl(CacheControl.FORCE_NETWORK).build();
         } else {
-            request = request.newBuilder()
-                             .cacheControl(new CacheControl.Builder().maxStale(Integer.MAX_VALUE, TimeUnit.SECONDS)
-                                                                     .build())
-                             .build();
+            request = request.newBuilder().cacheControl(DEFAULT).build();
         }
         return chain.proceed(request);
     }
