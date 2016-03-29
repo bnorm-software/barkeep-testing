@@ -98,6 +98,29 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.jvnet.jaxb2.maven2</groupId>
+        <artifactId>maven-jaxb2-plugin</artifactId>
+        <version>0.12.3</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <schemaDirectory>src/main/xsd</schemaDirectory>
+          <schemaIncludes>
+            <include>**/*.xsd</include>
+          </schemaIncludes>
+          <bindingDirectory>src/main/xsd</bindingDirectory>
+          <bindingIncludes>
+            <include>**/bindings.xml</include>
+            <include>**/*.xjb</include>
+          </bindingIncludes>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 </project>
