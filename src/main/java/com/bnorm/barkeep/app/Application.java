@@ -14,7 +14,6 @@ import com.bnorm.barkeep.net.data.Book;
 import com.bnorm.barkeep.net.data.User;
 
 import okhttp3.HttpUrl;
-import retrofit2.Response;
 
 public class Application {
 
@@ -27,18 +26,21 @@ public class Application {
         this.service = service;
     }
 
+    Book created;
+
     public void run() throws IOException {
         User authentication = new User("bnorm", "nohomohug");
         Book book = new Book("Magic Recipes", "A book filled with magically delicious drink recipes.");
 
-        service.login(authentication).subscribe(System.out::println);
-        service.getBooks().execute();
-        Response<BarkeepService.BookCreate> created = service.createBook(book).execute();
-        service.getBooks().execute();
-        service.deleteBook(created.body().getBook().getId()).execute();
-        service.getBooks().execute();
-        service.logout().subscribe(System.out::println);
-        service.getIngredient().subscribe(System.out::println);
+        service.login(authentication).subscribe();
+        service.getBooks().subscribe();
+
+        service.createBook(book).subscribe(next -> created = next);
+        service.getBooks().subscribe();
+        service.deleteBook(created.getId()).subscribe();
+        service.getBooks().subscribe();
+        service.logout().subscribe();
+        service.getBooks().subscribe();
 
         System.out.println();
         controller.logCacheStats();
