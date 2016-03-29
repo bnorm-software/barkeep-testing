@@ -29,8 +29,11 @@ public class Application {
     Book created;
 
     public void run() throws IOException {
-        User authentication = new User("bnorm", "nohomohug");
-        Book book = new Book("Magic Recipes", "A book filled with magically delicious drink recipes.");
+        User authentication = User.builder().username("bnorm").password("nohomohug").build();
+        Book book = Book.builder()
+                        .title("Magic Recipes")
+                        .description("A book filled with magically delicious drink recipes.")
+                        .build();
 
         service.login(authentication).subscribe();
         service.getBooks().subscribe();

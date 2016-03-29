@@ -1,8 +1,10 @@
 package com.bnorm.barkeep.net.data;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Builder;
 
-@Data
+@Getter
+@Builder
 public class User {
 
     private final String username;
