@@ -26,14 +26,11 @@ public class Application {
         this.service = service;
     }
 
-    Book created;
+    private Book created;
 
     public void run() throws IOException {
-        User authentication = User.builder().username("bnorm").password("nohomohug").build();
-        Book book = Book.builder()
-                        .title("Magic Recipes")
-                        .description("A book filled with magically delicious drink recipes.")
-                        .build();
+        User authentication = new User("bnorm", "nohomohug");
+        Book book = new Book("Magic Recipes", "A book filled with magically delicious drink recipes.");
 
         service.login(authentication).subscribe();
         service.getBooks().subscribe();

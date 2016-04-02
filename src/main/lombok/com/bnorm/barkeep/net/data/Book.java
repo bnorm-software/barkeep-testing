@@ -1,10 +1,8 @@
 package com.bnorm.barkeep.net.data;
 
-import lombok.Getter;
-import lombok.Builder;
+import lombok.Data;
 
-@Getter
-@Builder
+@Data
 public class Book {
 
     private long id;
