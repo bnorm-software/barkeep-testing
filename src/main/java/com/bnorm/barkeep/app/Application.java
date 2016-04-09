@@ -14,6 +14,7 @@ import com.bnorm.barkeep.net.data.Book;
 import com.bnorm.barkeep.net.data.User;
 
 import okhttp3.HttpUrl;
+import retrofit2.Response;
 
 public class Application {
 
@@ -26,24 +27,26 @@ public class Application {
         this.service = service;
     }
 
-    private Book created;
-
     public void run() throws IOException {
         User authentication = new User("bnorm", "nohomohug");
         Book book = new Book("Magic Recipes", "A book filled with magically delicious drink recipes.");
 
-        service.login(authentication).subscribe();
-        service.getBooks().subscribe();
+        try {
+            Response<Void> response = service.login(authentication).execute();
+            if (response.isSuccessful()) {
+                service.getBooks().execute();
+                Book created = service.createBook(book).execute().body();
+                System.out.println(created.toString());
+                service.getBooks().execute();
+                service.deleteBook(created.getId()).execute();
+                service.getBooks().execute();
+                service.logout().execute();
+            }
 
-        service.createBook(book).subscribe(next -> created = next);
-        service.getBooks().subscribe();
-        service.deleteBook(created.getId()).subscribe();
-        service.getBooks().subscribe();
-        service.logout().subscribe();
-        service.getBooks().subscribe();
-
-        System.out.println();
-        controller.logCacheStats();
+        } finally {
+            System.out.println();
+            controller.logCacheStats();
+        }
     }
 
     public static void main(String[] args) throws IOException, URISyntaxException {

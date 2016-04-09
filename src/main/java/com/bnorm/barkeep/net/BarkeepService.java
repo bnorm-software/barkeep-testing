@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.bnorm.barkeep.net.data.Bar;
 import com.bnorm.barkeep.net.data.Book;
+import com.bnorm.barkeep.net.data.Ingredient;
+import com.bnorm.barkeep.net.data.Recipe;
 import com.bnorm.barkeep.net.data.User;
 
 import retrofit2.Call;
@@ -13,15 +15,14 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
-import rx.Observable;
 
 public interface BarkeepService {
 
     @POST("login")
-    Observable<Void> login(@Body User user);
+    Call<Void> login(@Body User user);
 
     @POST("logout")
-    Observable<Void> logout();
+    Call<Void> logout();
 
 
     // ================= //
@@ -29,19 +30,19 @@ public interface BarkeepService {
     // ================= //
 
     @GET("books")
-    Observable<List<Book>> getBooks();
+    Call<List<Book>> getBooks();
 
     @POST("books")
-    Observable<Book> createBook(@Body Book book);
+    Call<Book> createBook(@Body Book book);
 
     @GET("books/{id}")
-    Observable<Book> getBook(@Path("id") long id);
+    Call<Book> getBook(@Path("id") long id);
 
     @PUT("books/{id}")
-    Observable<Book> updateBook(@Path("id") long id);
+    Call<Book> updateBook(@Path("id") long id);
 
     @DELETE("books/{id}")
-    Observable<Void> deleteBook(@Path("id") long id);
+    Call<Void> deleteBook(@Path("id") long id);
 
 
     // ================= //
@@ -49,17 +50,57 @@ public interface BarkeepService {
     // ================= //
 
     @GET("bars")
-    Observable<List<Bar>> getBars();
+    Call<List<Bar>> getBars();
 
     @POST("bars")
-    Observable<Bar> createBar(@Body Bar book);
+    Call<Bar> createBar(@Body Book book);
 
     @GET("bars/{id}")
-    Observable<Bar> getBar(@Path("id") long id);
+    Call<Bar> getBar(@Path("id") long id);
 
     @PUT("bars/{id}")
-    Observable<Bar> updateBar(@Path("id") long id);
+    Call<Bar> updateBar(@Path("id") long id);
 
     @DELETE("bars/{id}")
-    Observable<Void> deleteBar(@Path("id") long id);
+    Call<Void> deleteBar(@Path("id") long id);
+
+
+    // =================== //
+    // ***** Recipes ***** //
+    // =================== //
+
+    @GET("books{book}/recipes")
+    Call<List<Recipe>> getRecipes(@Path("book") long book);
+
+    @POST("books{book}/recipes")
+    Call<Recipe> createRecipe(@Path("book") long book, @Body Recipe recipe);
+
+    @GET("books{book}/recipes/{id}")
+    Call<Recipe> getRecipe(@Path("book") long book, @Path("id") long id);
+
+    @PUT("books{book}/recipes/{id}")
+    Call<Recipe> updateRecipe(@Path("book") long book, @Path("id") long id);
+
+    @DELETE("books{book}/recipes/{id}")
+    Call<Recipe> deleteRecipe(@Path("book") long book, @Path("id") long id);
+
+
+    // ======================= //
+    // ***** Ingredients ***** //
+    // ======================= //
+
+    @GET("ingredients")
+    Call<List<Ingredient>> getIngredients();
+
+    @POST("ingredients")
+    Call<Ingredient> createIngredient(@Body Ingredient ingredient);
+
+    @GET("ingredients/{id}")
+    Call<Ingredient> getIngredient(@Path("id") long id);
+
+    @PUT("ingredients/{id}")
+    Call<Ingredient> updateIngredient(@Path("id") long id);
+
+    @DELETE("ingredients/{id}")
+    Call<Ingredient> deleteIngredient(@Path("id") long id);
 }

@@ -9,10 +9,10 @@ import okhttp3.Request;
 
 public class CacheInterceptor implements Interceptor {
 
-    public static final CacheControl DEFAULT = new CacheControl.Builder().maxStale(Integer.MAX_VALUE, TimeUnit.SECONDS)
-                                                                         .build();
+    private static final CacheControl DEFAULT = new CacheControl.Builder().maxAge(Integer.MAX_VALUE, TimeUnit.SECONDS)
+                                                                          .build();
 
-    public boolean refresh = false;
+    private boolean refresh = false;
 
     @Override
     public okhttp3.Response intercept(Chain chain) throws IOException {
@@ -23,5 +23,9 @@ public class CacheInterceptor implements Interceptor {
             request = request.newBuilder().cacheControl(DEFAULT).build();
         }
         return chain.proceed(request);
+    }
+
+    public void refresh(boolean refresh) {
+        this.refresh = refresh;
     }
 }
