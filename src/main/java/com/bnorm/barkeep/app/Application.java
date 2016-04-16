@@ -28,25 +28,25 @@ public class Application {
     }
 
     public void run() throws IOException {
-        User authentication = new User("bnorm", "nohomohug");
-        Book book = new Book("Magic Recipes", "A book filled with magically delicious drink recipes.");
+        User authentication = User.create("bnorm", "nohomohug");
+        Book book = Book.create("Magic Recipes", "A book filled with magically delicious drink recipes.");
 
-        try {
-            Response<Void> response = service.login(authentication).execute();
-            if (response.isSuccessful()) {
-                service.getBooks().execute();
-                Book created = service.createBook(book).execute().body();
-                System.out.println(created.toString());
-                service.getBooks().execute();
-                service.deleteBook(created.getId()).execute();
-                service.getBooks().execute();
-                service.logout().execute();
-            }
-
-        } finally {
-            System.out.println();
-            controller.logCacheStats();
+        Response<Void> response = service.login(authentication).execute();
+        if (response.isSuccessful()) {
+            System.out.println("Successfully logged in with user [" + authentication.username() + "]");
+            service.getBooks().execute();
+            Book created = service.createBook(book).execute().body();
+            System.out.println(created.toString());
+            service.getBooks().execute();
+            service.deleteBook(created.id()).execute();
+            service.getBooks().execute();
+            service.logout().execute();
+        } else {
+            System.out.println("Unable to login! Error: [" + response.errorBody().string() + "]");
         }
+
+        System.out.println();
+        controller.logCacheStats();
     }
 
     public static void main(String[] args) throws IOException, URISyntaxException {

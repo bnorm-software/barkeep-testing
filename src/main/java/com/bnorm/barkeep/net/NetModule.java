@@ -1,9 +1,11 @@
 package com.bnorm.barkeep.net;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
 import java.util.Set;
+
+import com.google.common.collect.ImmutableSet;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 
 import dagger.Module;
 import dagger.Provides;
@@ -43,10 +45,10 @@ public class NetModule {
     @NetScope
     @Provides(type = Provides.Type.SET_VALUES)
     Set<Interceptor> provideInterceptors(CacheInterceptor cacheInterceptor) {
-        return new LinkedHashSet<>(Arrays.asList(cacheInterceptor,
-                                                 new SessionInterceptor(),
-                                                 new TokenInterceptor(),
-                                                 new WireTraceInterceptor()));
+        return ImmutableSet.of(cacheInterceptor,
+                               new SessionInterceptor(),
+                               new TokenInterceptor(),
+                               new WireTraceInterceptor());
     }
 
     @NetScope
@@ -59,10 +61,24 @@ public class NetModule {
     }
 
     @NetScope
+    @Provides(type = Provides.Type.SET_VALUES)
+    Set<JsonAdapter.Factory> provideJsonAdapterFactories() {
+        return ImmutableSet.of();
+    }
+
+    @NetScope
     @Provides
-    Retrofit provideRetrofit(OkHttpClient okHttpClient) {
+    Moshi provideMoshi(Set<JsonAdapter.Factory> adapterFactories) {
+        Moshi.Builder builder = new Moshi.Builder();
+        adapterFactories.forEach(builder::add);
+        return builder.build();
+    }
+
+    @NetScope
+    @Provides
+    Retrofit provideRetrofit(OkHttpClient okHttpClient, Moshi moshi) {
         Retrofit.Builder builder = new Retrofit.Builder();
-        builder.addConverterFactory(MoshiConverterFactory.create());
+        builder.addConverterFactory(MoshiConverterFactory.create(moshi));
         builder.addCallAdapterFactory(RxJavaCallAdapterFactory.create());
         builder.baseUrl(httpUrl);
         builder.client(okHttpClient);
