@@ -47,7 +47,7 @@
       <groupId>com.google.dagger</groupId>
       <artifactId>dagger-compiler</artifactId>
       <version>${dagger.version}</version>
-      <optional>true</optional>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -65,7 +65,7 @@
     <dependency>
       <groupId>com.gabrielittner.auto.value</groupId>
       <artifactId>auto-value-with</artifactId>
-      <version>0.1.0</version>
+      <version>0.1.1</version>
       <scope>provided</scope>
     </dependency>
     <!-- parcel 'com.ryanharter.auto.value:auto-value-parcel-adapter:0.2.1' -->
@@ -76,7 +76,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.3</version>
+        <version>3.5.1</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
@@ -90,7 +90,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>2.4</version>
+        <version>3.0.0</version>
         <executions>
           <execution>
             <id>attach-sources</id>
@@ -104,7 +104,7 @@
       <plugin>
         <groupId>org.jvnet.jaxb2.maven2</groupId>
         <artifactId>maven-jaxb2-plugin</artifactId>
-        <version>0.12.3</version>
+        <version>0.13.1</version>
         <executions>
           <execution>
             <goals>
