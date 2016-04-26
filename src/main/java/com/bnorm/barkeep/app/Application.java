@@ -38,7 +38,7 @@ public class Application {
             Book created = service.createBook(book).execute().body();
             System.out.println(created.toString());
             service.getBooks().execute();
-            service.deleteBook(created.id()).execute();
+            service.deleteBook(created.getId()).execute();
             service.getBooks().execute();
             service.logout().execute();
         } else {

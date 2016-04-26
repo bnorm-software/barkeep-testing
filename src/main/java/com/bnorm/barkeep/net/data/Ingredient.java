@@ -10,11 +10,10 @@ public abstract class Ingredient {
     public static Ingredient create(String title, Ingredient ingredient) { return new AutoValue_Ingredient(-1, title, ingredient); }
     public static JsonAdapter.Factory typeAdapterFactory() { return AutoValue_Ingredient.typeAdapterFactory(); }
 
-    public abstract long id();
-    public abstract String title();
-    public abstract Ingredient base();
+    public abstract long getId();
+    public abstract String getTitle();
+    public abstract Ingredient getBase();
 
-    public abstract Ingredient withId(long id);
-    public abstract Ingredient withTitle(String title);
-    public abstract Ingredient withBase(Ingredient base);
+    public Ingredient withTitle(String title) { return new AutoValue_Ingredient(getId(), title, getBase()); }
+    public Ingredient withBase(Ingredient base) { return new AutoValue_Ingredient(getId(), getTitle(), base); }
 }
