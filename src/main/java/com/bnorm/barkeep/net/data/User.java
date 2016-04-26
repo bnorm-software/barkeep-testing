@@ -10,9 +10,9 @@ public abstract class User {
     public static User create(String username, String password) { return new AutoValue_User(username, password); }
     public static JsonAdapter.Factory typeAdapterFactory() { return AutoValue_User.typeAdapterFactory(); }
 
-    public abstract String username();
-    public abstract String password();
+    public abstract String getUsername();
+    public abstract String getPassword();
 
-    public abstract User withUsername(String username);
-    public abstract User withPassword(String password);
+    public User withUsername(String username) { return new AutoValue_User(username, getPassword()); }
+    public User withPassword(String password){ return new AutoValue_User(getUsername(), password); }
 }

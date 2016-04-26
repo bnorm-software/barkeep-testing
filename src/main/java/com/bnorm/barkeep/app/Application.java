@@ -33,7 +33,7 @@ public class Application {
 
         Response<Void> response = service.login(authentication).execute();
         if (response.isSuccessful()) {
-            System.out.println("Successfully logged in with user [" + authentication.username() + "]");
+            System.out.println("Successfully logged in with user [" + authentication.getUsername() + "]");
             service.getBooks().execute();
             Book created = service.createBook(book).execute().body();
             System.out.println(created.toString());
