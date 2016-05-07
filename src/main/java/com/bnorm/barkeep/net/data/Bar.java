@@ -17,7 +17,7 @@ public abstract class Bar {
     public abstract String getTitle();
     public abstract String getDescription();
 
-    public Bar withType(String type) { return new AutoValue_Bar(getId(), type, getTitle(), getDescription()); }
-    public Bar withTitle(String title) { return new AutoValue_Bar(getId(), getType(), title, getDescription()); }
-    public Bar withDescription(String description) { return new AutoValue_Bar(getId(), getType(), getTitle(), description); }
+    public abstract Bar withType(String type);
+    public abstract Bar withTitle(String title);
+    public abstract Bar withDescription(String description);
 }

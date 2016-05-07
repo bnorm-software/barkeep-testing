@@ -13,6 +13,6 @@ public abstract class User {
     public abstract String getUsername();
     public abstract String getPassword();
 
-    public User withUsername(String username) { return new AutoValue_User(username, getPassword()); }
-    public User withPassword(String password){ return new AutoValue_User(getUsername(), password); }
+    public abstract User withUsername(String username);
+    public abstract User withPassword(String password);
 }

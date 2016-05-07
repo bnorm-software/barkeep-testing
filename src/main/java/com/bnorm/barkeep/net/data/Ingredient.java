@@ -14,6 +14,6 @@ public abstract class Ingredient {
     public abstract String getTitle();
     public abstract Ingredient getBase();
 
-    public Ingredient withTitle(String title) { return new AutoValue_Ingredient(getId(), title, getBase()); }
-    public Ingredient withBase(Ingredient base) { return new AutoValue_Ingredient(getId(), getTitle(), base); }
+    public abstract Ingredient withTitle(String title);
+    public abstract Ingredient withBase(Ingredient base);
 }

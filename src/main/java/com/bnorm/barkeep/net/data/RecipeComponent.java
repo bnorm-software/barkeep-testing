@@ -19,9 +19,9 @@ public abstract class RecipeComponent {
     public abstract int getComponentNum();
     public abstract int getOrder();
 
-    public RecipeComponent withIngredient(Ingredient ingredient) { return new AutoValue_RecipeComponent(getId(), ingredient, getMin(), getMax(), getComponentNum(), getOrder()); }
-    public RecipeComponent withMin(double min) { return new AutoValue_RecipeComponent(getId(), getIngredient(), min, getMax(), getComponentNum(), getOrder()); }
-    public RecipeComponent withMax(Double max) { return new AutoValue_RecipeComponent(getId(), getIngredient(), getMin(), max, getComponentNum(), getOrder()); }
-    public RecipeComponent withComponentNum(int componentNum) { return new AutoValue_RecipeComponent(getId(), getIngredient(), getMin(), getMax(), componentNum, getOrder()); }
-    public RecipeComponent withOrder(int order) { return new AutoValue_RecipeComponent(getId(), getIngredient(), getMin(), getMax(), getComponentNum(), order); }
+    public abstract RecipeComponent withIngredient(Ingredient ingredient);
+    public abstract RecipeComponent withMin(double min);
+    public abstract RecipeComponent withMax(Double max);
+    public abstract RecipeComponent withComponentNum(int componentNum);
+    public abstract RecipeComponent withOrder(int order);
 }

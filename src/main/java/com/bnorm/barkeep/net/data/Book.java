@@ -17,7 +17,7 @@ public abstract class Book {
     public abstract String getTitle();
     public abstract String getDescription();
 
-    public Book withType(String type) { return new AutoValue_Book(getId(), type, getTitle(), getDescription()); }
-    public Book withTitle(String title) { return new AutoValue_Book(getId(), getType(), title, getDescription()); }
-    public Book withDescription(String description) { return new AutoValue_Book(getId(), getType(), getTitle(), description); }
+    public abstract Book withType(String type);
+    public abstract Book withTitle(String title);
+    public abstract Book withDescription(String description);
 }
