@@ -10,9 +10,9 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <retrofit.version>2.0.1</retrofit.version>
-    <rxjava.version>1.1.0</rxjava.version>
-    <dagger.version>2.2</dagger.version>
+    <retrofit.version>2.0.2</retrofit.version>
+    <rxjava.version>1.1.5</rxjava.version>
+    <dagger.version>2.4</dagger.version>
   </properties>
 
   <dependencies>
@@ -39,6 +39,14 @@
     </dependency>
 
     <dependency>
+      <groupId>com.squareup</groupId>
+      <artifactId>javapoet</artifactId>
+      <version>1.7.0</version>
+      <scope>provided</scope>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
       <groupId>com.google.dagger</groupId>
       <artifactId>dagger</artifactId>
       <version>${dagger.version}</version>
@@ -48,6 +56,7 @@
       <artifactId>dagger-compiler</artifactId>
       <version>${dagger.version}</version>
       <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
 
     <dependency>
@@ -55,17 +64,21 @@
       <artifactId>auto-value</artifactId>
       <version>1.2</version>
       <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>com.ryanharter.auto.value</groupId>
       <artifactId>auto-value-moshi</artifactId>
-      <version>0.2.2</version>
+      <version>0.3.0</version>
       <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>com.gabrielittner.auto.value</groupId>
       <artifactId>auto-value-with</artifactId>
       <version>0.1.3</version>
+      <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
     <!-- parcel 'com.ryanharter.auto.value:auto-value-parcel-adapter:0.2.1' -->
 
