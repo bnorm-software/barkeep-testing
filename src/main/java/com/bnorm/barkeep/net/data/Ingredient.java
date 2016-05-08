@@ -2,18 +2,19 @@ package com.bnorm.barkeep.net.data;
 
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 
 @AutoValue
 public abstract class Ingredient {
 
     // @formatter:off
     public static Ingredient create(String title, Ingredient ingredient) { return new AutoValue_Ingredient(-1, title, ingredient); }
-    public static JsonAdapter.Factory typeAdapterFactory() { return AutoValue_Ingredient.typeAdapterFactory(); }
+    public static JsonAdapter<Ingredient> jsonAdapter(Moshi moshi) { return new AutoValue_Ingredient.MoshiJsonAdapter(moshi); }
 
     public abstract long getId();
     public abstract String getTitle();
     public abstract Ingredient getBase();
 
-    public Ingredient withTitle(String title) { return new AutoValue_Ingredient(getId(), title, getBase()); }
-    public Ingredient withBase(Ingredient base) { return new AutoValue_Ingredient(getId(), getTitle(), base); }
+    public abstract Ingredient withTitle(String title);
+    public abstract Ingredient withBase(Ingredient base);
 }

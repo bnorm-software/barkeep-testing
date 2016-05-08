@@ -18,7 +18,7 @@ public class BookTest {
 
     @Test
     public void typeAdapterFactory() throws Exception {
-        JsonAdapter<Book> adapter = new Moshi.Builder().add(Book.typeAdapterFactory()).build().adapter(Book.class);
+        JsonAdapter<Book> adapter = Book.jsonAdapter(new Moshi.Builder().build());
 
         String json = adapter.toJson(Book.create("title", "description"));
         assertThat(json).isEqualTo("{\"id\":-1,\"title\":\"title\",\"description\":\"description\"}");

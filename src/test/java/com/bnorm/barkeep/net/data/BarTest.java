@@ -18,7 +18,7 @@ public class BarTest {
 
     @Test
     public void typeAdapterFactory() throws Exception {
-        JsonAdapter<Bar> adapter = new Moshi.Builder().add(Bar.typeAdapterFactory()).build().adapter(Bar.class);
+        JsonAdapter<Bar> adapter = Bar.jsonAdapter(new Moshi.Builder().build());
 
         String json = adapter.toJson(Bar.create("title", "description"));
         assertThat(json).isEqualTo("{\"id\":-1,\"title\":\"title\",\"description\":\"description\"}");
