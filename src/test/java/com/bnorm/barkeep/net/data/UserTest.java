@@ -18,7 +18,7 @@ public class UserTest {
 
     @Test
     public void typeAdapterFactory() throws Exception {
-        JsonAdapter<User> adapter = new Moshi.Builder().add(User.typeAdapterFactory()).build().adapter(User.class);
+        JsonAdapter<User> adapter = User.jsonAdapter(new Moshi.Builder().build());
 
         String json = adapter.toJson(User.create("username", "password"));
         assertThat(json).isEqualTo("{\"username\":\"username\",\"password\":\"password\"}");

@@ -4,13 +4,14 @@ import javax.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 
 @AutoValue
 public abstract class RecipeComponent {
 
     // @formatter:off
     public static RecipeComponent create(Ingredient ingredient, double min) { return new AutoValue_RecipeComponent(-1, ingredient, min, null, -1, -1); }
-    public static JsonAdapter.Factory typeAdapterFactory() { return AutoValue_RecipeComponent.typeAdapterFactory(); }
+    public static JsonAdapter<RecipeComponent> jsonAdapter(Moshi moshi) { return new AutoValue_RecipeComponent.MoshiJsonAdapter(moshi); }
 
     public abstract long getId();
     public abstract Ingredient getIngredient();
