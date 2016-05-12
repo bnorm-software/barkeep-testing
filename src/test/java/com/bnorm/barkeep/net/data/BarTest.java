@@ -1,14 +1,26 @@
 package com.bnorm.barkeep.net.data;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+import com.bnorm.ResourcePath;
+import com.bnorm.ResourcePathsRule;
+import com.bnorm.UnitTest;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
-import static com.bnorm.barkeep.net.data.Assertions.*;
-import static org.assertj.core.api.Assertions.*;
+import static com.bnorm.barkeep.net.data.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
+@Category(UnitTest.class)
 public class BarTest {
+
+    private static final String EXPECTED = "bar.expected.json";
+    private static final String INPUT = "bar.input.json";
+
+    @Rule
+    public final ResourcePathsRule paths = new ResourcePathsRule();
 
     @Test
     public void create() throws Exception {
@@ -17,13 +29,15 @@ public class BarTest {
     }
 
     @Test
+    @ResourcePath(EXPECTED)
+    @ResourcePath(INPUT)
     public void typeAdapterFactory() throws Exception {
         JsonAdapter<Bar> adapter = Bar.jsonAdapter(new Moshi.Builder().build());
 
         String json = adapter.toJson(Bar.create("title", "description"));
-        assertThat(json).isEqualTo("{\"id\":-1,\"title\":\"title\",\"description\":\"description\"}");
+        assertThat(json).isEqualTo(paths.string(EXPECTED));
 
-        Bar bar = adapter.fromJson("{\"id\":1,\"type\":\"type\",\"title\":\"title\",\"description\":\"description\"}");
+        Bar bar = adapter.fromJson(paths.string(INPUT));
         assertThat(bar).hasId(1).hasType("type").hasTitle("title").hasDescription("description");
     }
 

@@ -1,14 +1,26 @@
 package com.bnorm.barkeep.net.data;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+import com.bnorm.ResourcePath;
+import com.bnorm.ResourcePathsRule;
+import com.bnorm.UnitTest;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
 import static com.bnorm.barkeep.net.data.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Category(UnitTest.class)
 public class BookTest {
+
+    private static final String EXPECTED = "book.expected.json";
+    private static final String INPUT = "book.input.json";
+
+    @Rule
+    public final ResourcePathsRule paths = new ResourcePathsRule();
 
     @Test
     public void create() throws Exception {
@@ -17,13 +29,15 @@ public class BookTest {
     }
 
     @Test
+    @ResourcePath(EXPECTED)
+    @ResourcePath(INPUT)
     public void typeAdapterFactory() throws Exception {
         JsonAdapter<Book> adapter = Book.jsonAdapter(new Moshi.Builder().build());
 
         String json = adapter.toJson(Book.create("title", "description"));
-        assertThat(json).isEqualTo("{\"id\":-1,\"title\":\"title\",\"description\":\"description\"}");
+        assertThat(json).isEqualTo(paths.string(EXPECTED));
 
-        Book book = adapter.fromJson("{\"id\":1,\"type\":\"type\",\"title\":\"title\",\"description\":\"description\"}");
+        Book book = adapter.fromJson(paths.string(INPUT));
         assertThat(book).hasId(1).hasType("type").hasTitle("title").hasDescription("description");
     }
 
