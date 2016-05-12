@@ -7,13 +7,12 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
 @AutoValue
-public abstract class RecipeComponent {
+public abstract class RecipeComponent implements HasId {
 
     // @formatter:off
     public static RecipeComponent create(Ingredient ingredient, double min) { return new AutoValue_RecipeComponent(-1, ingredient, min, null, -1, -1); }
     public static JsonAdapter<RecipeComponent> jsonAdapter(Moshi moshi) { return new AutoValue_RecipeComponent.MoshiJsonAdapter(moshi); }
 
-    public abstract long getId();
     public abstract Ingredient getIngredient();
     public abstract double getMin();
     @Nullable public abstract Double getMax();

@@ -7,13 +7,12 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
 @AutoValue
-public abstract class Book {
+public abstract class Book implements HasId {
 
     // @formatter:off
     public static Book create(String title, String description) { return new AutoValue_Book(-1, null, title, description); }
     public static JsonAdapter<Book> jsonAdapter(Moshi moshi) { return new AutoValue_Book.MoshiJsonAdapter(moshi); }
 
-    public abstract long getId();
     @Nullable public abstract String getType();
     public abstract String getTitle();
     public abstract String getDescription();

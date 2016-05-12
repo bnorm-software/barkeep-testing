@@ -10,13 +10,12 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
 @AutoValue
-public abstract class Recipe {
+public abstract class Recipe implements HasId {
 
     // @formatter:off
     public static Recipe create(String title, String description) { return new AutoValue_Recipe(-1, title, description, null, null, null, ImmutableList.of()); }
     public static JsonAdapter<Recipe> jsonAdapter(Moshi moshi) { return new AutoValue_Recipe.MoshiJsonAdapter(moshi); }
 
-    public abstract long getId();
     public abstract String getTitle();
     public abstract String getDescription();
     @Nullable public abstract String getImage();
