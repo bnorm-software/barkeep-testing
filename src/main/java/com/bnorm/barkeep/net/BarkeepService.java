@@ -7,7 +7,6 @@ import com.bnorm.barkeep.net.data.Book;
 import com.bnorm.barkeep.net.data.Ingredient;
 import com.bnorm.barkeep.net.data.Recipe;
 import com.bnorm.barkeep.net.data.User;
-
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -15,6 +14,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface BarkeepService {
 
@@ -53,7 +53,7 @@ public interface BarkeepService {
     Call<List<Bar>> getBars();
 
     @POST("bars")
-    Call<Bar> createBar(@Body Book book);
+    Call<Bar> createBar(@Body Bar bar);
 
     @GET("bars/{id}")
     Call<Bar> getBar(@Path("id") long id);
@@ -69,19 +69,19 @@ public interface BarkeepService {
     // ***** Recipes ***** //
     // =================== //
 
-    @GET("books{book}/recipes")
+    @GET("books/{book}/recipes")
     Call<List<Recipe>> getRecipes(@Path("book") long book);
 
-    @POST("books{book}/recipes")
+    @POST("books/{book}/recipes")
     Call<Recipe> createRecipe(@Path("book") long book, @Body Recipe recipe);
 
-    @GET("books{book}/recipes/{id}")
+    @GET("books/{book}/recipes/{id}")
     Call<Recipe> getRecipe(@Path("book") long book, @Path("id") long id);
 
-    @PUT("books{book}/recipes/{id}")
+    @PUT("books/{book}/recipes/{id}")
     Call<Recipe> updateRecipe(@Path("book") long book, @Path("id") long id);
 
-    @DELETE("books{book}/recipes/{id}")
+    @DELETE("books/{book}/recipes/{id}")
     Call<Recipe> deleteRecipe(@Path("book") long book, @Path("id") long id);
 
 
@@ -90,7 +90,7 @@ public interface BarkeepService {
     // ======================= //
 
     @GET("ingredients")
-    Call<List<Ingredient>> getIngredients();
+    Call<List<Ingredient>> getIngredients(@Query("search") String search);
 
     @POST("ingredients")
     Call<Ingredient> createIngredient(@Body Ingredient ingredient);

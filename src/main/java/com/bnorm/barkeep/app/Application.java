@@ -2,7 +2,6 @@ package com.bnorm.barkeep.app;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-
 import javax.inject.Inject;
 
 import com.bnorm.barkeep.net.BarkeepService;
@@ -10,9 +9,9 @@ import com.bnorm.barkeep.net.DaggerNetComponent;
 import com.bnorm.barkeep.net.NetComponent;
 import com.bnorm.barkeep.net.NetModule;
 import com.bnorm.barkeep.net.NetworkController;
+import com.bnorm.barkeep.net.data.Bar;
 import com.bnorm.barkeep.net.data.Book;
 import com.bnorm.barkeep.net.data.User;
-
 import okhttp3.HttpUrl;
 import retrofit2.Response;
 
@@ -30,16 +29,25 @@ public class Application {
     public void run() throws IOException {
         User authentication = User.create("bnorm", "nohomohug");
         Book book = Book.create("Magic Recipes", "A book filled with magically delicious drink recipes.");
+        Bar bar = Bar.create("Magic Spirits", "A bar filled with magically delicious spirits.");
 
         Response<Void> response = service.login(authentication).execute();
         if (response.isSuccessful()) {
             System.out.println("Successfully logged in with user [" + authentication.getUsername() + "]");
             service.getBooks().execute();
-            Book created = service.createBook(book).execute().body();
-            System.out.println(created.toString());
+            Book createdBook = service.createBook(book).execute().body();
+            System.out.println(createdBook.toString());
             service.getBooks().execute();
-            service.deleteBook(created.getId()).execute();
+            service.deleteBook(createdBook.getId()).execute();
             service.getBooks().execute();
+
+            service.getBars().execute();
+            Bar createdBar = service.createBar(bar).execute().body();
+            System.out.println(createdBar.toString());
+            service.getBars().execute();
+            service.deleteBar(createdBar.getId()).execute();
+            service.getBars().execute();
+
             service.logout().execute();
         } else {
             System.out.println("Unable to login! Error: [" + response.errorBody().string() + "]");
