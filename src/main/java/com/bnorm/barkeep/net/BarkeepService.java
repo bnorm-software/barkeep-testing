@@ -7,6 +7,7 @@ import com.bnorm.barkeep.net.data.Book;
 import com.bnorm.barkeep.net.data.Ingredient;
 import com.bnorm.barkeep.net.data.Recipe;
 import com.bnorm.barkeep.net.data.User;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -39,7 +40,7 @@ public interface BarkeepService {
     Call<Book> getBook(@Path("id") long id);
 
     @PUT("books/{id}")
-    Call<Book> updateBook(@Path("id") long id);
+    Call<Book> updateBook(@Path("id") long id, @Body Book book);
 
     @DELETE("books/{id}")
     Call<Void> deleteBook(@Path("id") long id);
@@ -59,7 +60,7 @@ public interface BarkeepService {
     Call<Bar> getBar(@Path("id") long id);
 
     @PUT("bars/{id}")
-    Call<Bar> updateBar(@Path("id") long id);
+    Call<Bar> updateBar(@Path("id") long id, @Body Bar bar);
 
     @DELETE("bars/{id}")
     Call<Void> deleteBar(@Path("id") long id);
@@ -79,10 +80,10 @@ public interface BarkeepService {
     Call<Recipe> getRecipe(@Path("book") long book, @Path("id") long id);
 
     @PUT("books/{book}/recipes/{id}")
-    Call<Recipe> updateRecipe(@Path("book") long book, @Path("id") long id);
+    Call<Recipe> updateRecipe(@Path("book") long book, @Path("id") long id, @Body Recipe recipe);
 
     @DELETE("books/{book}/recipes/{id}")
-    Call<Recipe> deleteRecipe(@Path("book") long book, @Path("id") long id);
+    Call<Void> deleteRecipe(@Path("book") long book, @Path("id") long id);
 
 
     // ======================= //
@@ -92,6 +93,9 @@ public interface BarkeepService {
     @GET("ingredients")
     Call<List<Ingredient>> getIngredients(@Query("search") String search);
 
+    @GET("ingredients")
+    Call<List<Ingredient>> getIngredients();
+
     @POST("ingredients")
     Call<Ingredient> createIngredient(@Body Ingredient ingredient);
 
@@ -99,8 +103,8 @@ public interface BarkeepService {
     Call<Ingredient> getIngredient(@Path("id") long id);
 
     @PUT("ingredients/{id}")
-    Call<Ingredient> updateIngredient(@Path("id") long id);
+    Call<Ingredient> updateIngredient(@Path("id") long id, @Body Ingredient ingredient);
 
     @DELETE("ingredients/{id}")
-    Call<Ingredient> deleteIngredient(@Path("id") long id);
+    Call<Void> deleteIngredient(@Path("id") long id);
 }
