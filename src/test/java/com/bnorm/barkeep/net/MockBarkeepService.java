@@ -3,22 +3,35 @@ package com.bnorm.barkeep.net;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 import javax.inject.Inject;
 
 import com.bnorm.barkeep.net.data.Bar;
 import com.bnorm.barkeep.net.data.Book;
 import com.bnorm.barkeep.net.data.CreateBarResponse;
 import com.bnorm.barkeep.net.data.CreateBookResponse;
+import com.bnorm.barkeep.net.data.CreateIngredientResponse;
+import com.bnorm.barkeep.net.data.CreateRecipeResponse;
 import com.bnorm.barkeep.net.data.DeleteBarResponse;
 import com.bnorm.barkeep.net.data.DeleteBookResponse;
+import com.bnorm.barkeep.net.data.DeleteIngredientResponse;
+import com.bnorm.barkeep.net.data.DeleteRecipeResponse;
+import com.bnorm.barkeep.net.data.GetBarResponse;
 import com.bnorm.barkeep.net.data.GetBarsResponse;
+import com.bnorm.barkeep.net.data.GetBookResponse;
 import com.bnorm.barkeep.net.data.GetBooksResponse;
+import com.bnorm.barkeep.net.data.GetIngredientResponse;
+import com.bnorm.barkeep.net.data.GetIngredientsResponse;
+import com.bnorm.barkeep.net.data.GetRecipeResponse;
+import com.bnorm.barkeep.net.data.GetRecipesResponse;
 import com.bnorm.barkeep.net.data.Ingredient;
 import com.bnorm.barkeep.net.data.LoginResponse;
 import com.bnorm.barkeep.net.data.LogoutResponse;
 import com.bnorm.barkeep.net.data.MockResponse;
 import com.bnorm.barkeep.net.data.Recipe;
+import com.bnorm.barkeep.net.data.UpdateBarResponse;
+import com.bnorm.barkeep.net.data.UpdateBookResponse;
+import com.bnorm.barkeep.net.data.UpdateIngredientResponse;
+import com.bnorm.barkeep.net.data.UpdateRecipeResponse;
 import com.bnorm.barkeep.net.data.User;
 
 import retrofit2.Call;
@@ -31,7 +44,7 @@ import retrofit2.mock.MockRetrofit;
 
 public final class MockBarkeepService implements BarkeepService {
     private final BehaviorDelegate<BarkeepService> delegate;
-    private final Map<Class<? extends MockResponse<?>>, Supplier<? extends MockResponse<?>>> responses;
+    private final Map<Class<? extends MockResponse<?>>, MockResponse<?>> responses;
 
     @Inject
     MockBarkeepService(MockRetrofit mockRetrofit) {
@@ -39,27 +52,40 @@ public final class MockBarkeepService implements BarkeepService {
         this.responses = new LinkedHashMap<>();
 
         // Initialize mock responses.
-        responses.put(LoginResponse.class, () -> LoginResponse.Enum.Success);
-        responses.put(LogoutResponse.class, () -> LogoutResponse.Enum.Success);
-        responses.put(GetBooksResponse.class, () -> GetBooksResponse.Enum.Success);
-        responses.put(CreateBookResponse.class, () -> CreateBookResponse.Enum.Success);
-        responses.put(DeleteBookResponse.class, () -> DeleteBookResponse.Enum.Success);
-        responses.put(GetBarsResponse.class, () -> GetBarsResponse.Enum.Success);
-        responses.put(CreateBarResponse.class, () -> CreateBarResponse.Enum.Success);
-        responses.put(DeleteBarResponse.class, () -> DeleteBarResponse.Enum.Success);
+        set(LoginResponse.class, LoginResponse.Enum.Success);
+        set(LogoutResponse.class, LogoutResponse.Enum.Success);
+
+        set(GetBooksResponse.class, GetBooksResponse.Enum.Success);
+        set(CreateBookResponse.class, CreateBookResponse.Enum.Success);
+        set(GetBookResponse.class, GetBookResponse.Enum.Success);
+        set(UpdateBookResponse.class, UpdateBookResponse.Enum.Success);
+        set(DeleteBookResponse.class, DeleteBookResponse.Enum.Success);
+
+        set(GetBarsResponse.class, GetBarsResponse.Enum.Success);
+        set(CreateBarResponse.class, CreateBarResponse.Enum.Success);
+        set(GetBarResponse.class, GetBarResponse.Enum.Success);
+        set(UpdateBarResponse.class, UpdateBarResponse.Enum.Success);
+        set(DeleteBarResponse.class, DeleteBarResponse.Enum.Success);
+
+        set(GetRecipesResponse.class, GetRecipesResponse.Enum.Success);
+        set(CreateRecipeResponse.class, CreateRecipeResponse.Enum.Success);
+        set(GetRecipeResponse.class, GetRecipeResponse.Enum.Success);
+        set(UpdateRecipeResponse.class, UpdateRecipeResponse.Enum.Success);
+        set(DeleteRecipeResponse.class, DeleteRecipeResponse.Enum.Success);
+
+        set(GetIngredientsResponse.class, GetIngredientsResponse.Enum.Success);
+        set(CreateIngredientResponse.class, CreateIngredientResponse.Enum.Success);
+        set(GetIngredientResponse.class, GetIngredientResponse.Enum.Success);
+        set(UpdateIngredientResponse.class, UpdateIngredientResponse.Enum.Success);
+        set(DeleteIngredientResponse.class, DeleteIngredientResponse.Enum.Success);
     }
 
     public <T extends MockResponse<?>> void set(Class<T> responseClass, T value) {
-        responses.put(responseClass, () -> value);
-    }
-
-    public <T extends MockResponse<?>> void set(Class<T> responseClass, Supplier<T> supplier) {
-        responses.put(responseClass, supplier);
+        responses.put(responseClass, value);
     }
 
     private <T extends MockResponse<?>> BarkeepService returning(Class<T> responseClass) {
-        Supplier<? extends MockResponse<?>> supplier = responses.get(responseClass);
-        T value = responseClass.cast(supplier.get());
+        T value = responseClass.cast(responses.get(responseClass));
         Call<?> call = Calls.response(value.response());
         return delegate.returning(call);
     }
@@ -86,12 +112,12 @@ public final class MockBarkeepService implements BarkeepService {
 
     @Override
     public Call<Book> getBook(@Path("id") long id) {
-        return null;
+        return returning(GetBookResponse.class).getBook(id);
     }
 
     @Override
     public Call<Book> updateBook(@Path("id") long id, @Body Book book) {
-        return null;
+        return returning(UpdateBookResponse.class).updateBook(id, book);
     }
 
     @Override
@@ -111,12 +137,12 @@ public final class MockBarkeepService implements BarkeepService {
 
     @Override
     public Call<Bar> getBar(@Path("id") long id) {
-        return null;
+        return returning(GetBarResponse.class).getBar(id);
     }
 
     @Override
     public Call<Bar> updateBar(@Path("id") long id, @Body Bar bar) {
-        return null;
+        return returning(UpdateBarResponse.class).updateBar(id, bar);
     }
 
     @Override
@@ -126,56 +152,56 @@ public final class MockBarkeepService implements BarkeepService {
 
     @Override
     public Call<List<Recipe>> getRecipes(@Path("book") long book) {
-        return null;
+        return returning(GetRecipesResponse.class).getRecipes(book);
     }
 
     @Override
     public Call<Recipe> createRecipe(@Path("book") long book, @Body Recipe recipe) {
-        return null;
+        return returning(CreateRecipeResponse.class).createRecipe(book, recipe);
     }
 
     @Override
     public Call<Recipe> getRecipe(@Path("book") long book, @Path("id") long id) {
-        return null;
+        return returning(GetRecipeResponse.class).getRecipe(book, id);
     }
 
     @Override
     public Call<Recipe> updateRecipe(@Path("book") long book, @Path("id") long id, @Body Recipe recipe) {
-        return null;
+        return returning(UpdateRecipeResponse.class).updateRecipe(book, id, recipe);
     }
 
     @Override
     public Call<Void> deleteRecipe(@Path("book") long book, @Path("id") long id) {
-        return null;
+        return returning(DeleteRecipeResponse.class).deleteRecipe(book, id);
     }
 
     @Override
     public Call<List<Ingredient>> getIngredients(@Query("search") String search) {
-        return null;
+        return returning(GetIngredientsResponse.class).getIngredients(search);
     }
 
     @Override
     public Call<List<Ingredient>> getIngredients() {
-        return null;
+        return returning(GetIngredientsResponse.class).getIngredients();
     }
 
     @Override
     public Call<Ingredient> createIngredient(@Body Ingredient ingredient) {
-        return null;
+        return returning(CreateIngredientResponse.class).createIngredient(ingredient);
     }
 
     @Override
     public Call<Ingredient> getIngredient(@Path("id") long id) {
-        return null;
+        return returning(GetIngredientResponse.class).getIngredient(id);
     }
 
     @Override
     public Call<Ingredient> updateIngredient(@Path("id") long id, @Body Ingredient ingredient) {
-        return null;
+        return returning(UpdateIngredientResponse.class).updateIngredient(id, ingredient);
     }
 
     @Override
     public Call<Void> deleteIngredient(@Path("id") long id) {
-        return null;
+        return returning(DeleteIngredientResponse.class).deleteIngredient(id);
     }
 }
