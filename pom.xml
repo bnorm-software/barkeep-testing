@@ -187,8 +187,9 @@
             </goals>
             <configuration>
               <resources>
-                <resource>src/test-integration/resources</resource>
-                <resource>src/test-unit/resources</resource>
+                <resource>
+                  <directory>src/test-unit/resources</directory>
+                </resource>
               </resources>
             </configuration>
           </execution>
