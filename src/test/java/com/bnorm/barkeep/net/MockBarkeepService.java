@@ -3,6 +3,7 @@ package com.bnorm.barkeep.net;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import javax.inject.Inject;
 
 import com.bnorm.barkeep.net.data.Bar;
@@ -30,7 +31,7 @@ import retrofit2.mock.MockRetrofit;
 
 public final class MockBarkeepService implements BarkeepService {
     private final BehaviorDelegate<BarkeepService> delegate;
-    private final Map<Class<? extends Enum<? extends MockResponse<?>>>, Enum<? extends MockResponse<?>>> responses;
+    private final Map<Class<? extends MockResponse<?>>, Supplier<? extends MockResponse<?>>> responses;
 
     @Inject
     MockBarkeepService(MockRetrofit mockRetrofit) {
@@ -38,30 +39,29 @@ public final class MockBarkeepService implements BarkeepService {
         this.responses = new LinkedHashMap<>();
 
         // Initialize mock responses.
-        load(LoginResponse.class, LoginResponse.Success);
-        load(LogoutResponse.class, LogoutResponse.Success);
-        load(GetBooksResponse.class, GetBooksResponse.Success);
-        load(CreateBookResponse.class, CreateBookResponse.Success);
-        load(DeleteBookResponse.class, DeleteBookResponse.Success);
-        load(GetBarsResponse.class, GetBarsResponse.Success);
-        load(CreateBarResponse.class, CreateBarResponse.Success);
-        load(DeleteBarResponse.class, DeleteBarResponse.Success);
+        responses.put(LoginResponse.class, () -> LoginResponse.Enum.Success);
+        responses.put(LogoutResponse.class, () -> LogoutResponse.Enum.Success);
+        responses.put(GetBooksResponse.class, () -> GetBooksResponse.Enum.Success);
+        responses.put(CreateBookResponse.class, () -> CreateBookResponse.Enum.Success);
+        responses.put(DeleteBookResponse.class, () -> DeleteBookResponse.Enum.Success);
+        responses.put(GetBarsResponse.class, () -> GetBarsResponse.Enum.Success);
+        responses.put(CreateBarResponse.class, () -> CreateBarResponse.Enum.Success);
+        responses.put(DeleteBarResponse.class, () -> DeleteBarResponse.Enum.Success);
     }
 
-    private <T extends Enum<T> & MockResponse<?>> void load(Class<T> responseClass, T defaultValue) {
-        responses.put(responseClass, defaultValue);
+    public <T extends MockResponse<?>> void set(Class<T> responseClass, T value) {
+        responses.put(responseClass, () -> value);
     }
 
-    public <T extends Enum<T> & MockResponse<?>> T get(Class<T> responseClass) {
-        return responseClass.cast(responses.get(responseClass));
+    public <T extends MockResponse<?>> void set(Class<T> responseClass, Supplier<T> supplier) {
+        responses.put(responseClass, supplier);
     }
 
-    public <T extends Enum<T> & MockResponse<?>> void set(Class<T> responseClass, T value) {
-        responses.put(responseClass, value);
-    }
-
-    private <T extends Enum<T> & MockResponse<?>> BarkeepService returning(Class<T> responseClass) {
-        return delegate.returning(Calls.response(get(responseClass).response()));
+    private <T extends MockResponse<?>> BarkeepService returning(Class<T> responseClass) {
+        Supplier<? extends MockResponse<?>> supplier = responses.get(responseClass);
+        T value = responseClass.cast(supplier.get());
+        Call<?> call = Calls.response(value.response());
+        return delegate.returning(call);
     }
 
     @Override
