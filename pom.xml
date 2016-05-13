@@ -168,14 +168,28 @@
         <executions>
           <execution>
             <id>add-test-source</id>
-            <phase>generate-sources</phase>
+            <phase>generate-test-sources</phase>
             <goals>
               <goal>add-test-source</goal>
             </goals>
             <configuration>
               <sources>
-                <source>src/integration/java</source>
+                <source>src/test-integration/java</source>
+                <source>src/test-unit/java</source>
               </sources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>add-test-resources</id>
+            <phase>generate-test-resources</phase>
+            <goals>
+              <goal>add-test-resource</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>src/test-integration/resources</resource>
+                <resource>src/test-unit/resources</resource>
+              </resources>
             </configuration>
           </execution>
         </executions>

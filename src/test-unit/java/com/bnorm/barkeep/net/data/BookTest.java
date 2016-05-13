@@ -7,6 +7,7 @@ import org.junit.experimental.categories.Category;
 import com.bnorm.ResourcePath;
 import com.bnorm.ResourcePathsRule;
 import com.bnorm.UnitTest;
+import com.bnorm.barkeep.net.data.Book;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
