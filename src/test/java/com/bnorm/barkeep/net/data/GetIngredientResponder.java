@@ -1,9 +1,11 @@
 package com.bnorm.barkeep.net.data;
 
+import com.bnorm.barkeep.net.Responder;
+
 import retrofit2.Response;
 
-public interface CreateIngredientResponse extends MockResponse<Ingredient> {
-    enum Enum implements CreateIngredientResponse {
+public interface GetIngredientResponder extends Responder<Ingredient> {
+    enum Enum implements GetIngredientResponder {
         Success {
             @Override
             public Response<Ingredient> response() {
@@ -13,7 +15,7 @@ public interface CreateIngredientResponse extends MockResponse<Ingredient> {
         Unauthorized {
             @Override
             public Response<Ingredient> response() {
-                return Response.error(401, MockResponse.json("{\"message\":\"Invalid Credentials\"}"));
+                return Response.error(401, Responder.json("{\"message\":\"Invalid Credentials\"}"));
             }
         }
     }

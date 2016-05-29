@@ -3,10 +3,12 @@ package com.bnorm.barkeep.net.data;
 import java.util.Collections;
 import java.util.List;
 
+import com.bnorm.barkeep.net.Responder;
+
 import retrofit2.Response;
 
-public interface GetBarsResponse extends MockResponse<List<Bar>> {
-    enum Enum implements GetBarsResponse {
+public interface GetBarsResponder extends Responder<List<Bar>> {
+    enum Enum implements GetBarsResponder {
         Success {
             @Override
             public Response<List<Bar>> response() {
@@ -16,7 +18,7 @@ public interface GetBarsResponse extends MockResponse<List<Bar>> {
         Unauthorized {
             @Override
             public Response<List<Bar>> response() {
-                return Response.error(401, MockResponse.json("{\"message\":\"Invalid Credentials\"}"));
+                return Response.error(401, Responder.json("{\"message\":\"Invalid Credentials\"}"));
             }
         }
     }
