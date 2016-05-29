@@ -8,7 +8,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.bnorm.barkeep.app.AppComponent;
-import com.bnorm.barkeep.app.DaggerAppComponent;
 
 import okhttp3.HttpUrl;
 import retrofit2.mock.NetworkBehavior;
@@ -28,11 +27,8 @@ public class ApplicationTest {
         behavior.setFailurePercent(0);
         behavior.setVariancePercent(0);
         ExecutorService executor = Executors.newCachedThreadPool();
-        MockNetComponent mockNetComponent = DaggerMockNetComponent.builder()
-                                                                  .netModule(new NetModule(urlBuilder.build()))
-                                                                  .mockNetModule(new MockNetModule(behavior, executor))
-                                                                  .build();
-        AppComponent appComponent = DaggerAppComponent.builder().netComponent(mockNetComponent).build();
+        MockNetComponent mockNetComponent = MockNetComponent.build(urlBuilder, behavior, executor);
+        AppComponent appComponent = AppComponent.build(mockNetComponent);
         appComponent.app().run();
         executor.shutdown();
     }

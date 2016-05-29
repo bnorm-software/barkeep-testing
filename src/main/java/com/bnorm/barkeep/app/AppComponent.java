@@ -8,5 +8,9 @@ import dagger.Component;
 @Component(dependencies = NetComponent.class)
 public interface AppComponent {
 
+    static AppComponent build(NetComponent netComponent) {
+        return DaggerAppComponent.builder().netComponent(netComponent).build();
+    }
+
     Application app();
 }

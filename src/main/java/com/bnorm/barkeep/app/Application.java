@@ -5,13 +5,13 @@ import java.net.URISyntaxException;
 import javax.inject.Inject;
 
 import com.bnorm.barkeep.net.BarkeepService;
-import com.bnorm.barkeep.net.DaggerNetComponent;
 import com.bnorm.barkeep.net.NetComponent;
 import com.bnorm.barkeep.net.NetModule;
 import com.bnorm.barkeep.net.NetworkController;
 import com.bnorm.barkeep.net.data.Bar;
 import com.bnorm.barkeep.net.data.Book;
 import com.bnorm.barkeep.net.data.User;
+
 import okhttp3.HttpUrl;
 import retrofit2.Response;
 
@@ -69,8 +69,8 @@ public class Application {
         urlBuilder.addPathSegment("");
 
         NetModule netModule = new NetModule(urlBuilder.build());
-        NetComponent netComponent = DaggerNetComponent.builder().netModule(netModule).build();
-        AppComponent appComponent = DaggerAppComponent.builder().netComponent(netComponent).build();
+        NetComponent netComponent = NetComponent.build(netModule);
+        AppComponent appComponent = AppComponent.build(netComponent);
 
         appComponent.app().run();
     }
