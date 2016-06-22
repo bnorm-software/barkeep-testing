@@ -12,7 +12,7 @@ public interface GetBooksResponder extends Responder<List<Book>> {
         Success {
             @Override
             public Response<List<Book>> response() {
-                return Response.success(Collections.singletonList(Book.create(1, "Private", "Book1", "Description1")));
+                return Response.success(Collections.singletonList(Book.create(1L, "Private", "Book1", "Description1")));
             }
         },
         Unauthorized {

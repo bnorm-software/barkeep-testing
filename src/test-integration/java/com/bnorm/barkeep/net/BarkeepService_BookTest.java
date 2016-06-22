@@ -1,6 +1,7 @@
 package com.bnorm.barkeep.net;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +48,7 @@ public class BarkeepService_BookTest extends BarkeepServiceBaseTest {
     @Test
     public void createBook_failure_badId() throws Exception {
         // given
-        Book book = Book.create(1, "Public", "Book1", "Description1");
+        Book book = Book.create(1L, "Public", "Book1", "Description1");
 
         // when
         Response<Book> response = service.createBook(book).execute();
@@ -68,7 +69,7 @@ public class BarkeepService_BookTest extends BarkeepServiceBaseTest {
         Book book1 = service.createBook(Book.create("Book1", "Description1")).execute().body();
 
         // when
-        Response<Book> response = service.getBook(book1.getId()).execute();
+        Response<Book> response = service.getBook(Objects.requireNonNull(book1.getId())).execute();
 
         // then
         assertThat(response.isSuccessful()).isTrue();
@@ -102,7 +103,8 @@ public class BarkeepService_BookTest extends BarkeepServiceBaseTest {
         Book book1 = service.createBook(Book.create("Book1", "Description1")).execute().body();
 
         // when
-        Response<Book> response = service.updateBook(book1.getId(), book1.withTitle("Book2")).execute();
+        Response<Book> response = service.updateBook(Objects.requireNonNull(book1.getId()), book1.withTitle("Book2"))
+                                         .execute();
 
         // then
         assertThat(response.isSuccessful()).isTrue();
@@ -119,7 +121,8 @@ public class BarkeepService_BookTest extends BarkeepServiceBaseTest {
         Book book1 = service.createBook(Book.create("Book1", "Description1")).execute().body();
 
         // when
-        Response<Book> response = service.updateBook(book1.getId(), Book.create("Book2", "Description2")).execute();
+        Response<Book> response = service.updateBook(Objects.requireNonNull(book1.getId()),
+                                                     Book.create("Book2", "Description2")).execute();
 
         // then
         assertThat(response.isSuccessful()).isTrue();
@@ -153,7 +156,7 @@ public class BarkeepService_BookTest extends BarkeepServiceBaseTest {
         Book book1 = service.createBook(Book.create("Book1", "Description1")).execute().body();
 
         // when
-        Response<Void> response = service.deleteBook(book1.getId()).execute();
+        Response<Void> response = service.deleteBook(Objects.requireNonNull(book1.getId())).execute();
 
         // then
         assertThat(response.isSuccessful()).isTrue();
@@ -194,7 +197,7 @@ public class BarkeepService_BookTest extends BarkeepServiceBaseTest {
     public void getBooks_successful_emptyAfterDelete() throws Exception {
         // given
         Book book1 = service.createBook(Book.create("Book1", "Description1")).execute().body();
-        service.deleteBook(book1.getId()).execute();
+        service.deleteBook(Objects.requireNonNull(book1.getId())).execute();
 
         // when
         Response<List<Book>> response = service.getBooks().execute();
@@ -226,8 +229,8 @@ public class BarkeepService_BookTest extends BarkeepServiceBaseTest {
         Book book1 = service.createBook(Book.create("Book1", "Description1")).execute().body();
         Book book2 = service.createBook(Book.create("Book2", "Description2")).execute().body();
         Book book3 = service.createBook(Book.create("Book3", "Description3")).execute().body();
-        service.deleteBook(book1.getId()).execute();
-        service.deleteBook(book3.getId()).execute();
+        service.deleteBook(Objects.requireNonNull(book1.getId())).execute();
+        service.deleteBook(Objects.requireNonNull(book3.getId())).execute();
 
         // when
         Response<List<Book>> response = service.getBooks().execute();
@@ -264,8 +267,8 @@ public class BarkeepService_BookTest extends BarkeepServiceBaseTest {
         Book book3 = service.createBook(Book.create("Book3", "Description3")).execute().body();
         Book book4 = service.createBook(Book.create("Book4", "Description4")).execute().body();
         Book book1 = service.createBook(Book.create("Book1", "Description1")).execute().body();
-        service.deleteBook(book4.getId()).execute();
-        service.deleteBook(book2.getId()).execute();
+        service.deleteBook(Objects.requireNonNull(book4.getId())).execute();
+        service.deleteBook(Objects.requireNonNull(book2.getId())).execute();
 
         // when
         Response<List<Book>> response = service.getBooks().execute();

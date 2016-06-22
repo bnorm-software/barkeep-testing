@@ -12,7 +12,7 @@ public interface GetBarsResponder extends Responder<List<Bar>> {
         Success {
             @Override
             public Response<List<Bar>> response() {
-                return Response.success(Collections.singletonList(Bar.create(1, "Private", "Bar1", "Description1")));
+                return Response.success(Collections.singletonList(Bar.create(1L, "Private", "Bar1", "Description1")));
             }
         },
         Unauthorized {

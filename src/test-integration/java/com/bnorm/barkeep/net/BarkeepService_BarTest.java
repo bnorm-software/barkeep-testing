@@ -1,6 +1,7 @@
 package com.bnorm.barkeep.net;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +48,7 @@ public class BarkeepService_BarTest extends BarkeepServiceBaseTest {
     @Test
     public void createBar_failure_badId() throws Exception {
         // given
-        Bar bar = Bar.create(1, "Public", "Bar1", "Description1");
+        Bar bar = Bar.create(1L, "Public", "Bar1", "Description1");
 
         // when
         Response<Bar> response = service.createBar(bar).execute();
@@ -68,7 +69,7 @@ public class BarkeepService_BarTest extends BarkeepServiceBaseTest {
         Bar bar1 = service.createBar(Bar.create("Bar1", "Description1")).execute().body();
 
         // when
-        Response<Bar> response = service.getBar(bar1.getId()).execute();
+        Response<Bar> response = service.getBar(Objects.requireNonNull(bar1.getId())).execute();
 
         // then
         assertThat(response.isSuccessful()).isTrue();
@@ -102,7 +103,8 @@ public class BarkeepService_BarTest extends BarkeepServiceBaseTest {
         Bar bar1 = service.createBar(Bar.create("Bar1", "Description1")).execute().body();
 
         // when
-        Response<Bar> response = service.updateBar(bar1.getId(), bar1.withTitle("Bar2")).execute();
+        Response<Bar> response = service.updateBar(Objects.requireNonNull(bar1.getId()), bar1.withTitle("Bar2"))
+                                        .execute();
 
         // then
         assertThat(response.isSuccessful()).isTrue();
@@ -119,7 +121,8 @@ public class BarkeepService_BarTest extends BarkeepServiceBaseTest {
         Bar bar1 = service.createBar(Bar.create("Bar1", "Description1")).execute().body();
 
         // when
-        Response<Bar> response = service.updateBar(bar1.getId(), Bar.create("Bar2", "Description2")).execute();
+        Response<Bar> response = service.updateBar(Objects.requireNonNull(bar1.getId()),
+                                                   Bar.create("Bar2", "Description2")).execute();
 
         // then
         assertThat(response.isSuccessful()).isTrue();
@@ -153,7 +156,7 @@ public class BarkeepService_BarTest extends BarkeepServiceBaseTest {
         Bar bar1 = service.createBar(Bar.create("Bar1", "Description1")).execute().body();
 
         // when
-        Response<Void> response = service.deleteBar(bar1.getId()).execute();
+        Response<Void> response = service.deleteBar(Objects.requireNonNull(bar1.getId())).execute();
 
         // then
         assertThat(response.isSuccessful()).isTrue();
@@ -194,7 +197,7 @@ public class BarkeepService_BarTest extends BarkeepServiceBaseTest {
     public void getBars_successful_emptyAfterDelete() throws Exception {
         // given
         Bar bar1 = service.createBar(Bar.create("Bar1", "Description1")).execute().body();
-        service.deleteBar(bar1.getId()).execute();
+        service.deleteBar(Objects.requireNonNull(bar1.getId())).execute();
 
         // when
         Response<List<Bar>> response = service.getBars().execute();
@@ -226,8 +229,8 @@ public class BarkeepService_BarTest extends BarkeepServiceBaseTest {
         Bar bar1 = service.createBar(Bar.create("Bar1", "Description1")).execute().body();
         Bar bar2 = service.createBar(Bar.create("Bar2", "Description2")).execute().body();
         Bar bar3 = service.createBar(Bar.create("Bar3", "Description3")).execute().body();
-        service.deleteBar(bar1.getId()).execute();
-        service.deleteBar(bar3.getId()).execute();
+        service.deleteBar(Objects.requireNonNull(bar1.getId())).execute();
+        service.deleteBar(Objects.requireNonNull(bar3.getId())).execute();
 
         // when
         Response<List<Bar>> response = service.getBars().execute();
@@ -264,8 +267,8 @@ public class BarkeepService_BarTest extends BarkeepServiceBaseTest {
         Bar bar3 = service.createBar(Bar.create("Bar3", "Description3")).execute().body();
         Bar bar4 = service.createBar(Bar.create("Bar4", "Description4")).execute().body();
         Bar bar1 = service.createBar(Bar.create("Bar1", "Description1")).execute().body();
-        service.deleteBar(bar4.getId()).execute();
-        service.deleteBar(bar2.getId()).execute();
+        service.deleteBar(Objects.requireNonNull(bar4.getId())).execute();
+        service.deleteBar(Objects.requireNonNull(bar2.getId())).execute();
 
         // when
         Response<List<Bar>> response = service.getBars().execute();

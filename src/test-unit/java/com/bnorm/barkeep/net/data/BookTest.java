@@ -7,7 +7,6 @@ import org.junit.experimental.categories.Category;
 import com.bnorm.ResourcePath;
 import com.bnorm.ResourcePathsRule;
 import com.bnorm.UnitTest;
-import com.bnorm.barkeep.net.data.Book;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
@@ -26,7 +25,7 @@ public class BookTest {
     @Test
     public void create() throws Exception {
         Book book = Book.create("title", "description");
-        assertThat(book).hasId(-1).hasType(null).hasTitle("title").hasDescription("description");
+        assertThat(book).hasId(null).hasType(null).hasTitle("title").hasDescription("description");
     }
 
     @Test
@@ -39,7 +38,7 @@ public class BookTest {
         assertThat(json).isEqualTo(paths.string(EXPECTED));
 
         Book book = adapter.fromJson(paths.string(INPUT));
-        assertThat(book).hasId(1).hasType("type").hasTitle("title").hasDescription("description");
+        assertThat(book).hasId(1L).hasType("type").hasTitle("title").hasDescription("description");
     }
 
     @Test

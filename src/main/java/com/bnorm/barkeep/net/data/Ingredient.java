@@ -10,9 +10,9 @@ import com.squareup.moshi.Moshi;
 public abstract class Ingredient implements HasId {
 
     // @formatter:off
-    public static Ingredient create(String title) { return create(-1, title, null); }
-    public static Ingredient create(String title, Ingredient ingredient) { return create(-1, title, ingredient); }
-    public static Ingredient create(long id, String title, Ingredient ingredient) { return new AutoValue_Ingredient(id, title, ingredient); }
+    public static Ingredient create(String title) { return create(null, title, null); }
+    public static Ingredient create(String title, Ingredient ingredient) { return create(null, title, ingredient); }
+    public static Ingredient create(Long id, String title, Ingredient ingredient) { return new AutoValue_Ingredient(id, title, ingredient); }
     public static JsonAdapter<Ingredient> jsonAdapter(Moshi moshi) { return new AutoValue_Ingredient.MoshiJsonAdapter(moshi); }
 
     public abstract String getTitle();

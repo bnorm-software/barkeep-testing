@@ -9,7 +9,7 @@ public interface GetBookResponder extends Responder<Book> {
         Success {
             @Override
             public Response<Book> response() {
-                return Response.success(Book.create(1, "Private", "Book1", "Description1"));
+                return Response.success(Book.create(1L, "Private", "Book1", "Description1"));
             }
         },
         Unauthorized {

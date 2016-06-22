@@ -10,7 +10,7 @@ import com.squareup.moshi.Moshi;
 public abstract class RecipeComponent implements HasId {
 
     // @formatter:off
-    public static RecipeComponent create(Ingredient ingredient, double min) { return new AutoValue_RecipeComponent(-1, ingredient, min, null, -1, -1); }
+    public static RecipeComponent create(Ingredient ingredient, double min) { return new AutoValue_RecipeComponent(null, ingredient, min, null, -1, -1); }
     public static JsonAdapter<RecipeComponent> jsonAdapter(Moshi moshi) { return new AutoValue_RecipeComponent.MoshiJsonAdapter(moshi); }
 
     public abstract Ingredient getIngredient();

@@ -7,7 +7,6 @@ import org.junit.experimental.categories.Category;
 import com.bnorm.ResourcePath;
 import com.bnorm.ResourcePathsRule;
 import com.bnorm.UnitTest;
-import com.bnorm.barkeep.net.data.Bar;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
@@ -26,7 +25,7 @@ public class BarTest {
     @Test
     public void create() throws Exception {
         Bar bar = Bar.create("title", "description");
-        assertThat(bar).hasId(-1).hasType(null).hasTitle("title").hasDescription("description");
+        assertThat(bar).hasId(null).hasType(null).hasTitle("title").hasDescription("description");
     }
 
     @Test
@@ -39,7 +38,7 @@ public class BarTest {
         assertThat(json).isEqualTo(paths.string(EXPECTED));
 
         Bar bar = adapter.fromJson(paths.string(INPUT));
-        assertThat(bar).hasId(1).hasType("type").hasTitle("title").hasDescription("description");
+        assertThat(bar).hasId(1L).hasType("type").hasTitle("title").hasDescription("description");
     }
 
     @Test

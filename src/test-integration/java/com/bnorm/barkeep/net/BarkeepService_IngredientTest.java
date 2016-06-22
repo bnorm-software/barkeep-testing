@@ -1,6 +1,7 @@
 package com.bnorm.barkeep.net;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +47,7 @@ public class BarkeepService_IngredientTest extends BarkeepServiceBaseTest {
     @Test
     public void createIngredient_failure_badId() throws Exception {
         // given
-        Ingredient ingredient = Ingredient.create(1, "Ingredient1", null);
+        Ingredient ingredient = Ingredient.create(1L, "Ingredient1", null);
 
         // when
         Response<Ingredient> response = service.createIngredient(ingredient).execute();
@@ -67,7 +68,7 @@ public class BarkeepService_IngredientTest extends BarkeepServiceBaseTest {
         Ingredient ingredient1 = service.createIngredient(Ingredient.create("Ingredient1")).execute().body();
 
         // when
-        Response<Ingredient> response = service.getIngredient(ingredient1.getId()).execute();
+        Response<Ingredient> response = service.getIngredient(Objects.requireNonNull(ingredient1.getId())).execute();
 
         // then
         assertThat(response.isSuccessful()).isTrue();
@@ -100,7 +101,7 @@ public class BarkeepService_IngredientTest extends BarkeepServiceBaseTest {
         Ingredient ingredient1 = service.createIngredient(Ingredient.create("Ingredient1")).execute().body();
 
         // when
-        Response<Ingredient> response = service.updateIngredient(ingredient1.getId(),
+        Response<Ingredient> response = service.updateIngredient(Objects.requireNonNull(ingredient1.getId()),
                                                                  ingredient1.withTitle("Ingredient2")).execute();
 
         // then
@@ -117,8 +118,8 @@ public class BarkeepService_IngredientTest extends BarkeepServiceBaseTest {
         Ingredient ingredient1 = service.createIngredient(Ingredient.create("Ingredient1")).execute().body();
 
         // when
-        Response<Ingredient> response = service.updateIngredient(ingredient1.getId(), Ingredient.create("Ingredient2"))
-                                               .execute();
+        Response<Ingredient> response = service.updateIngredient(Objects.requireNonNull(ingredient1.getId()),
+                                                                 Ingredient.create("Ingredient2")).execute();
 
         // then
         assertThat(response.isSuccessful()).isTrue();
@@ -151,7 +152,7 @@ public class BarkeepService_IngredientTest extends BarkeepServiceBaseTest {
         Ingredient ingredient1 = service.createIngredient(Ingredient.create("Ingredient1")).execute().body();
 
         // when
-        Response<Void> response = service.deleteIngredient(ingredient1.getId()).execute();
+        Response<Void> response = service.deleteIngredient(Objects.requireNonNull(ingredient1.getId())).execute();
 
         // then
         assertThat(response.isSuccessful()).isTrue();
@@ -192,7 +193,7 @@ public class BarkeepService_IngredientTest extends BarkeepServiceBaseTest {
     public void getIngredients_successful_emptyAfterDelete() throws Exception {
         // given
         Ingredient ingredient1 = service.createIngredient(Ingredient.create("Ingredient1")).execute().body();
-        service.deleteIngredient(ingredient1.getId()).execute();
+        service.deleteIngredient(Objects.requireNonNull(ingredient1.getId())).execute();
 
         // when
         Response<List<Ingredient>> response = service.getIngredients().execute();
@@ -224,8 +225,8 @@ public class BarkeepService_IngredientTest extends BarkeepServiceBaseTest {
         Ingredient ingredient1 = service.createIngredient(Ingredient.create("Ingredient1")).execute().body();
         Ingredient ingredient2 = service.createIngredient(Ingredient.create("Ingredient2")).execute().body();
         Ingredient ingredient3 = service.createIngredient(Ingredient.create("Ingredient3")).execute().body();
-        service.deleteIngredient(ingredient1.getId()).execute();
-        service.deleteIngredient(ingredient3.getId()).execute();
+        service.deleteIngredient(Objects.requireNonNull(ingredient1.getId())).execute();
+        service.deleteIngredient(Objects.requireNonNull(ingredient3.getId())).execute();
 
         // when
         Response<List<Ingredient>> response = service.getIngredients().execute();
@@ -262,8 +263,8 @@ public class BarkeepService_IngredientTest extends BarkeepServiceBaseTest {
         Ingredient ingredient3 = service.createIngredient(Ingredient.create("Ingredient3")).execute().body();
         Ingredient ingredient4 = service.createIngredient(Ingredient.create("Ingredient4")).execute().body();
         Ingredient ingredient1 = service.createIngredient(Ingredient.create("Ingredient1")).execute().body();
-        service.deleteIngredient(ingredient4.getId()).execute();
-        service.deleteIngredient(ingredient2.getId()).execute();
+        service.deleteIngredient(Objects.requireNonNull(ingredient4.getId())).execute();
+        service.deleteIngredient(Objects.requireNonNull(ingredient2.getId())).execute();
 
         // when
         Response<List<Ingredient>> response = service.getIngredients().execute();

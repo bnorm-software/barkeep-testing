@@ -1,6 +1,9 @@
 package com.bnorm.barkeep.net.data;
 
+import javax.annotation.Nullable;
+
 public interface HasId {
 
-    long getId();
+    @Nullable
+    Long getId();
 }

@@ -9,7 +9,7 @@ public interface CreateBarResponder extends Responder<Bar> {
         Success {
             @Override
             public Response<Bar> response() {
-                return Response.success(Bar.create(1, "Private", "Bar1", "Description1"));
+                return Response.success(Bar.create(1L, "Private", "Bar1", "Description1"));
             }
         },
         Unauthorized {

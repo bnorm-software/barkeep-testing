@@ -10,8 +10,8 @@ import com.squareup.moshi.Moshi;
 public abstract class Bar implements HasId {
 
     // @formatter:off
-    public static Bar create(String title, String description) { return create(-1, null, title, description); }
-    public static Bar create(long id, String type, String title, String description) { return new AutoValue_Bar(id, type, title, description); }
+    public static Bar create(String title, String description) { return create(null, null, title, description); }
+    public static Bar create(Long id, String type, String title, String description) { return new AutoValue_Bar(id, type, title, description); }
     public static JsonAdapter<Bar> jsonAdapter(Moshi moshi) { return new AutoValue_Bar.MoshiJsonAdapter(moshi); }
 
     @Nullable public abstract String getType();

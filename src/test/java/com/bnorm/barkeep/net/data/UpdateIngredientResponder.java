@@ -9,7 +9,7 @@ public interface UpdateIngredientResponder extends Responder<Ingredient> {
         Success {
             @Override
             public Response<Ingredient> response() {
-                return Response.success(Ingredient.create(1, "Ingredient1", null));
+                return Response.success(Ingredient.create(1L, "Ingredient1", null));
             }
         },
         Unauthorized {
