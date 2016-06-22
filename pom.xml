@@ -105,6 +105,12 @@
       <version>3.4.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.quicktheories</groupId>
+      <artifactId>quicktheories</artifactId>
+      <version>0.13</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -244,6 +250,36 @@
             <param>.*AutoValue.*</param>
             <param>.*_Provide.*</param>
           </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <version>1.1.10</version>
+        <executions>
+          <execution>
+            <phase>test</phase>
+            <goals>
+              <goal>mutationCoverage</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <targetClasses>
+            <param>com.bnorm.barkeep.net.data*</param>
+          </targetClasses>
+          <excludedClasses>
+            <!--Try and exclude all generated classes-->
+            <param>*AutoValue*</param>
+            <param>*_*Factory*</param>
+          </excludedClasses>
+          <includedGroups>
+            <param>com.bnorm.UnitTest</param>
+          </includedGroups>
+          <outputFormats>
+            <param>html</param>
+            <param>xml</param>
+          </outputFormats>
         </configuration>
       </plugin>
       <plugin>

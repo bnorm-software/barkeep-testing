@@ -7,12 +7,17 @@ import org.junit.experimental.categories.Category;
 import com.bnorm.ResourcePath;
 import com.bnorm.ResourcePathsRule;
 import com.bnorm.UnitTest;
-import com.bnorm.barkeep.net.data.User;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
 import static com.bnorm.barkeep.net.data.Assertions.assertThat;
+import static com.bnorm.barkeep.net.data.Sources.passwords;
+import static com.bnorm.barkeep.net.data.Sources.usernames;
+import static com.bnorm.barkeep.net.data.Sources.users;
+import static com.bnorm.qt.Consumers.throwing;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.quicktheories.quicktheories.QuickTheory.qt;
+import static org.quicktheories.quicktheories.generators.SourceDSL.strings;
 
 @Category(UnitTest.class)
 public class UserTest {
@@ -25,8 +30,12 @@ public class UserTest {
 
     @Test
     public void create() throws Exception {
-        User user = User.create("username", "password");
-        assertThat(user).hasUsername("username").hasPassword("password");
+        qt().forAll(usernames(), passwords()) //
+            .asWithPrecursor(User::create) //
+            .checkAssert((username, password, user) -> {
+                assertThat(user).hasUsername(username) //
+                                .hasPassword(password);
+            });
     }
 
     @Test
@@ -39,7 +48,16 @@ public class UserTest {
         assertThat(json).isEqualTo(paths.string(EXPECTED));
 
         User user = adapter.fromJson(paths.string(INPUT));
-        assertThat(user).hasUsername("username").hasPassword("password");
+        assertThat(user).hasUsername("username") //
+                        .hasPassword("password");
+
+        // ascii is the largest set that passes
+        qt().forAll(users(strings().ascii().ofLengthBetween(0, 20))) //
+            .checkAssert(throwing(here -> {
+                String there = adapter.toJson(here);
+                User back = adapter.fromJson(there);
+                assertThat(here).isEqualTo(back);
+            }));
     }
 
     @Test
@@ -47,8 +65,12 @@ public class UserTest {
         User user = User.create("username", "password");
         assertThat(user).hasUsername("username");
 
-        user = user.withUsername("username1");
-        assertThat(user).hasUsername("username1");
+        qt().forAll(usernames()) //
+            .asWithPrecursor(user::withUsername) //
+            .checkAssert((newUsername, newUser) -> {
+                assertThat(newUser).hasUsername(newUsername) //
+                                   .hasPassword("password");
+            });
     }
 
     @Test
@@ -56,7 +78,11 @@ public class UserTest {
         User user = User.create("username", "password");
         assertThat(user).hasPassword("password");
 
-        user = user.withPassword("password1");
-        assertThat(user).hasPassword("password1");
+        qt().forAll(passwords()) //
+            .asWithPrecursor(user::withPassword) //
+            .checkAssert((newPassword, newUser) -> {
+                assertThat(newUser).hasUsername("username") //
+                                   .hasPassword(newPassword);
+            });
     }
 }

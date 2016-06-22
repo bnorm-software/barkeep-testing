@@ -11,7 +11,14 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
 import static com.bnorm.barkeep.net.data.Assertions.assertThat;
+import static com.bnorm.barkeep.net.data.Sources.bars;
+import static com.bnorm.barkeep.net.data.Sources.descriptions;
+import static com.bnorm.barkeep.net.data.Sources.titles;
+import static com.bnorm.barkeep.net.data.Sources.types;
+import static com.bnorm.qt.Consumers.throwing;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.quicktheories.quicktheories.QuickTheory.qt;
+import static org.quicktheories.quicktheories.generators.SourceDSL.strings;
 
 @Category(UnitTest.class)
 public class BarTest {
@@ -24,8 +31,14 @@ public class BarTest {
 
     @Test
     public void create() throws Exception {
-        Bar bar = Bar.create("title", "description");
-        assertThat(bar).hasId(null).hasType(null).hasTitle("title").hasDescription("description");
+        qt().forAll(titles(), descriptions()) //
+            .asWithPrecursor(Bar::create) //
+            .checkAssert((title, description, bar) -> {
+                assertThat(bar).hasId(null) //
+                               .hasType(null) //
+                               .hasTitle(title) //
+                               .hasDescription(description);
+            });
     }
 
     @Test
@@ -38,7 +51,18 @@ public class BarTest {
         assertThat(json).isEqualTo(paths.string(EXPECTED));
 
         Bar bar = adapter.fromJson(paths.string(INPUT));
-        assertThat(bar).hasId(1L).hasType("type").hasTitle("title").hasDescription("description");
+        assertThat(bar).hasId(1L) //
+                       .hasType("type") //
+                       .hasTitle("title") //
+                       .hasDescription("description");
+
+        // ascii is the largest set that passes
+        qt().forAll(bars(strings().ascii().ofLengthBetween(0, 20))) //
+            .checkAssert(throwing(here -> {
+                String there = adapter.toJson(here);
+                Bar back = adapter.fromJson(there);
+                assertThat(here).isEqualTo(back);
+            }));
     }
 
     @Test
@@ -46,8 +70,14 @@ public class BarTest {
         Bar bar = Bar.create("title", "description");
         assertThat(bar).hasType(null);
 
-        bar = bar.withType("type");
-        assertThat(bar).hasType("type");
+        qt().forAll(types()) //
+            .asWithPrecursor(bar::withType) //
+            .checkAssert((newType, newBar) -> {
+                assertThat(newBar).hasId(null) //
+                                  .hasType(newType) //
+                                  .hasTitle("title") //
+                                  .hasDescription("description");
+            });
     }
 
     @Test
@@ -55,8 +85,14 @@ public class BarTest {
         Bar bar = Bar.create("title", "description");
         assertThat(bar).hasTitle("title");
 
-        bar = bar.withTitle("title1");
-        assertThat(bar).hasTitle("title1");
+        qt().forAll(titles()) //
+            .asWithPrecursor(bar::withTitle) //
+            .checkAssert((newTitle, newBar) -> {
+                assertThat(newBar).hasId(null) //
+                                  .hasType(null) //
+                                  .hasTitle(newTitle) //
+                                  .hasDescription("description");
+            });
     }
 
     @Test
@@ -64,7 +100,13 @@ public class BarTest {
         Bar bar = Bar.create("title", "description");
         assertThat(bar).hasDescription("description");
 
-        bar = bar.withDescription("description1");
-        assertThat(bar).hasDescription("description1");
+        qt().forAll(descriptions()) //
+            .asWithPrecursor(bar::withDescription) //
+            .checkAssert((newDescription, newBar) -> {
+                assertThat(newBar).hasId(null) //
+                                  .hasType(null) //
+                                  .hasTitle("title") //
+                                  .hasDescription(newDescription);
+            });
     }
 }

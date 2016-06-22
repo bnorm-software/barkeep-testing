@@ -11,7 +11,14 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
 import static com.bnorm.barkeep.net.data.Assertions.assertThat;
+import static com.bnorm.barkeep.net.data.Sources.books;
+import static com.bnorm.barkeep.net.data.Sources.descriptions;
+import static com.bnorm.barkeep.net.data.Sources.titles;
+import static com.bnorm.barkeep.net.data.Sources.types;
+import static com.bnorm.qt.Consumers.throwing;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.quicktheories.quicktheories.QuickTheory.qt;
+import static org.quicktheories.quicktheories.generators.SourceDSL.strings;
 
 @Category(UnitTest.class)
 public class BookTest {
@@ -24,8 +31,14 @@ public class BookTest {
 
     @Test
     public void create() throws Exception {
-        Book book = Book.create("title", "description");
-        assertThat(book).hasId(null).hasType(null).hasTitle("title").hasDescription("description");
+        qt().forAll(titles(), descriptions())
+            .asWithPrecursor(Book::create)
+            .checkAssert((title, description, book) -> {
+                assertThat(book).hasId(null) //
+                                .hasType(null) //
+                                .hasTitle(title) //
+                                .hasDescription(description);
+            });
     }
 
     @Test
@@ -38,7 +51,18 @@ public class BookTest {
         assertThat(json).isEqualTo(paths.string(EXPECTED));
 
         Book book = adapter.fromJson(paths.string(INPUT));
-        assertThat(book).hasId(1L).hasType("type").hasTitle("title").hasDescription("description");
+        assertThat(book).hasId(1L) //
+                        .hasType("type") //
+                        .hasTitle("title") //
+                        .hasDescription("description");
+
+        // ascii is the largest set that passes
+        qt().forAll(books(strings().ascii().ofLengthBetween(0, 20))) //
+            .checkAssert(throwing(here -> {
+                String there = adapter.toJson(here);
+                Book back = adapter.fromJson(there);
+                assertThat(here).isEqualTo(back);
+            }));
     }
 
     @Test
@@ -46,8 +70,14 @@ public class BookTest {
         Book book = Book.create("title", "description");
         assertThat(book).hasType(null);
 
-        book = book.withType("type");
-        assertThat(book).hasType("type");
+        qt().forAll(types()) //
+            .asWithPrecursor(book::withType) //
+            .checkAssert((newType, newBook) -> {
+                assertThat(newBook).hasId(null) //
+                                   .hasType(newType) //
+                                   .hasTitle("title") //
+                                   .hasDescription("description");
+            });
     }
 
     @Test
@@ -55,8 +85,14 @@ public class BookTest {
         Book book = Book.create("title", "description");
         assertThat(book).hasTitle("title");
 
-        book = book.withTitle("title1");
-        assertThat(book).hasTitle("title1");
+        qt().forAll(titles()) //
+            .asWithPrecursor(book::withTitle) //
+            .checkAssert((newTitle, newBook) -> {
+                assertThat(newBook).hasId(null) //
+                                   .hasType(null) //
+                                   .hasTitle(newTitle) //
+                                   .hasDescription("description");
+            });
     }
 
     @Test
@@ -64,7 +100,13 @@ public class BookTest {
         Book book = Book.create("title", "description");
         assertThat(book).hasDescription("description");
 
-        book = book.withDescription("description1");
-        assertThat(book).hasDescription("description1");
+        qt().forAll(descriptions()) //
+            .asWithPrecursor(book::withDescription) //
+            .checkAssert((newDescription, newBook) -> {
+                assertThat(newBook).hasId(null) //
+                                   .hasType(null) //
+                                   .hasTitle("title") //
+                                   .hasDescription(newDescription);
+            });
     }
 }
