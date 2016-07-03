@@ -2,6 +2,14 @@ machine:
   java:
     version: openjdk8
 
+dependency:
+  override:
+    - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+
 test:
+  override:
+    - mvn test -B
   post:
+    - cp -r target/pit-reports $CIRCLE_ARTIFACTS
+    - cp -r target/site/jacoco $CIRCLE_ARTIFACTS
     - bash <(curl -s https://codecov.io/bash)
