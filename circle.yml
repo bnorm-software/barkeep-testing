@@ -2,7 +2,7 @@ machine:
   java:
     version: openjdk8
 
-dependency:
+dependencies:
   override:
     - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
