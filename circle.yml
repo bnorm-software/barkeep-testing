@@ -4,7 +4,7 @@ machine:
 
 dependencies:
   override:
-    - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+    - mvn install -DskipTests=true -Dpit.report.skip=true -Dmaven.javadoc.skip=true -B -V
 
 test:
   override:
